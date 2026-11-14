@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Local database (the app creates its own on first run)
+students.db
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db

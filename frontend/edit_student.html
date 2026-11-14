@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <span class="brand">Student Management</span>
+        <a href="index.html">Dashboard</a>
+        <a href="students.html" class="active">Students</a>
+        <a href="add_student.html">Add Student</a>
+    </nav>
+
+    <main class="container">
+        <div class="page-header">
+            <h1>Edit Student</h1>
+        </div>
+
+        <div class="card">
+            <form id="edit-form">
+                <label>
+                    Name
+                    <input id="name" placeholder="e.g. Anu" required>
+                </label>
+                <label>
+                    Age
+                    <input id="age" type="number" min="1" placeholder="e.g. 20" required>
+                </label>
+                <label>
+                    Course
+                    <input id="course" placeholder="e.g. Python" required>
+                </label>
+                <div class="form-buttons">
+                    <button type="submit" class="btn">Save</button>
+                    <a href="students.html" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/edit.js"></script>
+</body>
+</html>
