@@ -1,14 +1,27 @@
 const API_URL = "http://127.0.0.1:5000/api/students";
+const searchBox = document.getElementById("search");
+let latestRequest = 0;  // numbers each search, so a slow old answer can't overwrite a newer one
 
 async function loadStudents() {
-    const response = await fetch(API_URL);
+    const search = searchBox.value.trim();
+    const thisRequest = ++latestRequest;
+
+    const response = await fetch(`${API_URL}?search=${encodeURIComponent(search)}`);
     const students = await response.json();
+
+    if (thisRequest !== latestRequest) {
+        return;  // the user typed more while we waited, so a newer search is on its way
+    }
 
     const list = document.getElementById("student-list");
     list.innerHTML = "";
 
     if (students.length === 0) {
-        list.innerHTML = '<tr><td colspan="5" class="empty">No students yet. Click "+ Add Student" to add one.</td></tr>';
+        if (search) {
+            showMessage(list, `No students match "${search}".`);
+        } else {
+            showMessage(list, 'No students yet. Click "+ Add Student" to add one.');
+        }
         return;
     }
 
@@ -41,6 +54,16 @@ async function loadStudents() {
     }
 }
 
+function showMessage(list, text) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 5;
+    cell.className = "empty";
+    cell.textContent = text;  // textContent, not innerHTML: the search text is shown as plain text, never run as HTML
+    row.appendChild(cell);
+    list.appendChild(row);
+}
+
 async function deleteStudent(id, name) {
     if (!confirm(`Delete ${name}?`)) {
         return;
@@ -57,4 +80,5 @@ async function deleteStudent(id, name) {
     loadStudents();
 }
 
+searchBox.addEventListener("input", loadStudents);  // runs on every keystroke, and when ✕ clears the box
 loadStudents();
