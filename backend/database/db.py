@@ -69,3 +69,11 @@ def update_student(student_id, name, age, course):
     connection.close()                                     # close students.db
     return updated                                         # True or False
 
+def search_students(text):
+    connection = get_connection()                          # open students.db
+    pattern = f"%{text}%"                                  # "%ai%" = contains "ai" anywhere
+    sql = "SELECT * FROM students WHERE name LIKE ? OR course LIKE ?"
+    rows = connection.execute(sql, (pattern, pattern)).fetchall()  # same pattern for both ?
+    connection.close()                                     # close students.db
+    return [dict(row) for row in rows]                     # rows → list of dicts
+
