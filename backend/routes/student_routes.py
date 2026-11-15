@@ -6,7 +6,8 @@ student_routes = Blueprint("student_routes", __name__)
 
 @student_routes.get("/api/students")
 def list_students():
-    return jsonify(student_service.get_students())
+    search = request.args.get("search", "")               # ?search=ra → "ra",  no ?search → ""
+    return jsonify(student_service.get_students(search))  # pass it down to the service
 
 
 @student_routes.post("/api/students")

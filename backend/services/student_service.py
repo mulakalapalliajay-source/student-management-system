@@ -4,11 +4,15 @@ from database.db import (
     delete_student,
     fetch_student,
     update_student,
+    search_students,
 )
 
 
-def get_students():
-    return fetch_all_students()
+def get_students(search=""):
+    search = search.strip()                # "  ra  " → "ra",   "   " → ""
+    if not search:                         # nothing left to search for?
+        return fetch_all_students()        # → everyone (the old behaviour)
+    return search_students(search)         # → only the matches
 
 
 def check_student_data(data):
