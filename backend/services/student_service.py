@@ -15,15 +15,28 @@ def get_students(search=""):
     return search_students(search)         # → only the matches
 
 
+def require_text(value, field):
+    if value is None:                      # missing or null
+        raise ValueError(f"{field} is required")
+    if not isinstance(value, str):         # 123, ["a"], {...} are not text
+        raise ValueError(f"{field} must be text")
+    value = value.strip()
+    if not value:                          # "   " → ""
+        raise ValueError(f"{field} is required")
+    return value
+
+
 def check_student_data(data):
-    name = str(data.get("name", "")).strip()
-    course = str(data.get("course", "")).strip()
+    if not isinstance(data, dict):         # [], null, "text", or no valid JSON at all
+        raise ValueError("Request body must be a JSON object")
+
+    name = require_text(data.get("name"), "Name")
+    course = require_text(data.get("course"), "Course")
     age = data.get("age")
 
-    if not name or not course:
-        raise ValueError("Name and course are required")
-    if not isinstance(age, int) or age <= 0:
-        raise ValueError("Age must be a positive number")
+    # bool is a subclass of int in Python (True == 1), so it has to be ruled out first
+    if isinstance(age, bool) or not isinstance(age, int) or age <= 0:
+        raise ValueError("Age must be a positive whole number")
 
     return name, age, course
 

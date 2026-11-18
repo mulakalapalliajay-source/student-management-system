@@ -13,7 +13,8 @@ def list_students():
 @student_routes.post("/api/students")
 def create_student():
     try:
-        student = student_service.create_student(request.get_json())
+        # silent=True: broken JSON, form data or no body give None instead of an HTML error page
+        student = student_service.create_student(request.get_json(silent=True))
     except ValueError as error:
         return jsonify({"error": str(error)}), 400
     return jsonify(student), 201
@@ -37,7 +38,7 @@ def get_student(student_id):
 @student_routes.put("/api/students/<int:student_id>")
 def update_student(student_id):
     try:
-        student = student_service.edit_student(student_id, request.get_json())
+        student = student_service.edit_student(student_id, request.get_json(silent=True))
     except ValueError as error:
         return jsonify({"error": str(error)}), 400
     except LookupError as error:
